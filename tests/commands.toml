@@ -1,0 +1,78 @@
+# /wp adds, lists, renames, recolours, hides and tracks waypoints, and keeps
+# separate sets per "world". The player starts at 0.5, 64, 0.5.
+
+[[step]]
+expect.commands = ["wp"]
+
+[[step]]
+ticks = 1
+
+[[step]]
+command = "wp add Home"
+expect.feedback = "Waypoint 'Home' added at 0, 64, 0"
+
+[[step]]
+command = "wp add Mine 100 12 -40"
+expect.feedback = "Waypoint 'Mine' added at 100, 12, -40"
+
+[[step]]
+command = "wp list"
+expect.feedback = "2 waypoints in set 'default': Home (0, 64, 0); Mine (100, 12, -40)"
+
+# A name is found by its start, whatever its case.
+[[step]]
+command = "wp del mi"
+expect.feedback = "Removed 'Mine'"
+
+[[step]]
+command = "wp rename home = Base"
+expect.feedback = "Renamed to 'Base'"
+
+[[step]]
+command = "wp color base aqua"
+expect.feedback = "'Base' is now aqua"
+
+[[step]]
+command = "wp add BASE"
+expect.error = "A waypoint called 'BASE' already exists"
+
+[[step]]
+command = "wp go base"
+expect.feedback = "Tracking 'Base': 0 m here"
+
+[[step]]
+command = "wp hide base"
+expect.feedback = "'Base' is hidden"
+
+[[step]]
+command = "wp show base"
+expect.feedback = "'Base' is shown"
+
+[[step]]
+command = "wp minimap off"
+expect.feedback = "Minimap off"
+
+[[step]]
+command = "wp frob"
+expect.error = "Unknown subcommand 'frob'. /wp help lists them"
+
+# Another world: its own, empty set; the first one is still there.
+[[step]]
+command = "wp world survival"
+expect.feedback = "Using waypoint set 'survival' (0 waypoints)"
+
+[[step]]
+command = "wp list"
+expect.feedback = "No waypoints in set 'survival' yet. /wp add <name>, or press B"
+
+[[step]]
+command = "wp world default"
+expect.feedback = "Using waypoint set 'default' (1 waypoint)"
+
+# What was saved comes back after the mod restarts.
+[[step]]
+reload = true
+
+[[step]]
+command = "wp list"
+expect.feedback = "1 waypoint in set 'default': Base (0, 64, 0)"
